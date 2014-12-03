@@ -1,0 +1,53 @@
+// Constants
+@border: #d2d2d2;
+
+// Macros
+.main {
+  min-height: 300px;
+  margin-top: 40px;
+  border-bottom: 1px solid @border;
+}
+.bb1 {border-bottom: 1px solid @border;}
+.ba1 {border: 1px solid @border;}
+
+body {
+  font-family: 'Noto Serif', serif;
+  font-size: 18px;
+  line-height: 25px;
+  color: #444;
+  background: #ebebeb;
+}
+
+.intro {
+  text-align: justify;
+  .main;
+}
+.question {
+  .main;
+  .heading {margin-bottom: 30px; .bb1; font-weight: bold;}
+  .answer {
+    border: 1px solid #ebebeb;
+    padding: 5px;
+    margin: 5px;
+    &:hover { .ba1; background-color: #e8e8e8;}
+    &.selected {font-weight: bold;}
+    &.correct { color: #468847; background-color: #dff0d8; border-color: #d6e9c6;}
+    &.incorrect { color: #b94a48; background-color: #f2dede; border-color: #eed3d7;}
+  }
+}
+.scorecard {
+  .main;
+  .row {border-bottom-style: solid; border-bottom-width: 1px; padding: 5px;}
+}
+
+.question_wrap {
+  min-height: 200px;
+  .row.image {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+}
+
+// Generic Styles;
+.capitalize {text-transform: capitalize;}
+.controls { margin: 40px 0; }

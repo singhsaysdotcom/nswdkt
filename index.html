@@ -1,0 +1,82 @@
+<!doctype html>
+<html ng-app="dkt_app">
+<head>
+  <title>Driving Knowledge Test</title>
+  <link href='http://fonts.googleapis.com/css?family=Noto+Serif' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/dkt.css">
+  <script type="text/javascript" src="js/underscore.min.js"></script>
+  <script type="text/javascript" src="js/angular.min.js"></script>
+  <script type="text/javascript" src="js/angular-ui.min.js"></script>
+  <script type="text/javascript" src="js/dkt.js"></script>
+</head>
+<body ng-controller="NavigationController">
+  <div class="container">
+    <h1>Driving Knowledge Test <span class="capitalize" ng-show="test">: {{test.test_type}}</span></h1>
+      <!-- Intro Slide -->
+      <div ng-show="!test.started" class="intro">
+        <p>The DKT is a computer-based road rules knowledge test. You have to answer 45 questions.</p>
+        <p>The computer selects the questions at random from a question bank of more than 600. You will first be asked 15 general knowledge questions and you need to get at least 12 correct. You will then be asked 30 road safety questions (including traffic signs) and you need to get at least 29 correct.</p>
+        <p>There is no time limit.</p>
+        <p>For more information, please visit <a href="http://www.rta.nsw.gov.au">www.rta.nsw.gov.au</a></p>
+      </div>
+      <!-- Question Slide -->
+      <div ng-show="test.started && !test.finished" class="question">
+        <div class="row heading">
+          <div class="span4">{{test.current_section}}</div>
+          <div class="span4"><progress value="progress"></progress></div>
+          <div class="span2 offset2">Score: {{test.score.total}}/45</div>
+        </div>
+        <div class="question_wrap">
+          <div class="row image" ng-if="test.current_question.images">
+            <img ng-repeat="i in test.current_question.images" ng-src="img/car/{{i}}">
+          </div>
+          <div class="row">Q: {{test.current_question.text}}</div>
+          <div class="row answer"
+               ng-click="select_answer($index)"
+               ng-class="{correct: answered && correct_answer == $index, incorrect: current_answer == $index && correct_answer != $index}"
+               ng-repeat="a in test.current_question.answers"> - {{a}}</div>
+          </div>
+          <div class="row controls">
+            <button class="btn" ng-click="next_question()">Next</button>
+          </div>
+      </div>
+      <!-- Scorecard Slide -->
+      <div ng-show="test.finished" class="scorecard">
+        <h3>Score Card</h3>
+        <div class="row"
+             ng-class="{'alert-success': test.passed, 'alert-error': !test.passed}">
+          <div class="span3"><strong>Result</strong></div><div class="span"><strong>{{test.result}}</strong></div>
+        </div>
+        <div class="row"
+             ng-class="{'alert-success': test.passed, 'alert-error': !test.passed}">
+          <div class="span3"><strong>Total</strong></div><div class="span"><strong>{{test.score.total}}/45</strong></div>
+        </div>
+        <div class="row"
+             ng-repeat="(name, score) in test.score.sections"
+             ng-class="{'alert-success': score.passed, 'alert-error': !score.passed}">
+          <div class="span3">{{name}}</div><div class="span">{{score.score}}/{{score.max}}</div>
+        </div>
+      </div>
+    </div>
+    <!-- Global Controls -->
+    <div style="text-align: center;" class="row controls">
+      <button type="button"
+              class="btn btn-primary btn-large"
+              ng-show="!test.started"
+              ng-click="start()">
+      Start Test</button>
+      <button type="button"
+              class="btn btn-primary btn-large"
+              ng-show="test.started && !test.finished"
+              ng-click="stop()">
+      End Test</button>
+      <button type="button"
+              class="btn btn-primary btn-large"
+              ng-show="test.finished"
+              onclick="location.reload();">
+      Restart Test</button>
+    </div>
+  </div>
+</body>
+</html>
